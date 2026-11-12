@@ -1,4 +1,4 @@
-
+data/*.pdf
 # Python
 __pycache__/
 *.py[cod]
