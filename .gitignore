@@ -1,0 +1,30 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Virtual environment
+venv/
+.env
+.env.*
+
+# Allow an example environment template
+!.env.example
+
+# IDE
+.vscode/
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Vector database
+chroma_db/
+
+# Uploaded documents
+data/uploads/
+
+# System files
+.DS_Store
+Thumbs.db
