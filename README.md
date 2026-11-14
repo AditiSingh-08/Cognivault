@@ -22,7 +22,10 @@ Searching through large PDF documents manually takes time. Cognivault uses RAG t
 - **ChromaDB** – Vector storage and similarity search
 - **Google Gemini** – Answer generation
 
+## Documentation
 
+- [System Architecture](docs/architecture.md) – Overview of the RAG pipeline, components, and data flow.
+  
 ## Features
 
 - Extract text from PDF documents.
@@ -128,3 +131,5 @@ Currently, the core RAG pipeline is implemented and tested.
 - [ ] Build FastAPI backend
 - [ ] Develop Streamlit interface
 - [ ] Add evaluation and testing
+
+
