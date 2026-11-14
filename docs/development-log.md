@@ -40,3 +40,25 @@ Understood how PDF text extraction and chunking prepare documents for the embedd
 
 ### Key Learning
 Understood how embeddings represent semantic meaning, how vector databases store them, and how similarity search retrieves relevant document chunks.
+
+
+
+## Day 3 — Gemini Integration and Answer Generation
+
+**Objective:** Connect document retrieval with an LLM to generate answers using retrieved context.
+
+### Implementation
+- Integrated Google Gemini using `ChatGoogleGenerativeAI`.
+- Loaded API credentials and model configuration from the `.env` file.
+- Created a `load_llm()` function to initialize the Gemini model.
+- Implemented `generate_answer()` to pass the user question and retrieved context to Gemini.
+- Connected ChromaDB retrieval with Gemini answer generation.
+
+### Testing Results
+- Successfully generated responses through LangChain.
+- Retrieved the top 3 relevant chunks from ChromaDB.
+- Tested the system with a question about critical incident prioritization.
+- Gemini correctly indicated that the retrieved context did not contain enough information to answer.
+
+### Key Learning
+Understood how retrieved document context is passed to an LLM, how prompts guide answer generation, and why a RAG system should avoid generating unsupported answers.
