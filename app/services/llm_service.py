@@ -27,7 +27,12 @@ def load_llm():
 
 
 
-def generate_answer(llm, question, context):
+
+def generate_answer(llm, question, retrieved_chunks):
+
+    context = "\n\n".join(
+        chunk["text"] for chunk in retrieved_chunks
+    )
 
     prompt = f"""
     You are Cognivault, an intelligent document assistant.
@@ -48,4 +53,21 @@ def generate_answer(llm, question, context):
 
     response = llm.invoke(prompt)
 
-    return response.content
+    answer = response.content
+
+    if isinstance(answer, list):
+        answer = "\n".join(
+            item["text"]
+            for item in answer
+            if item.get("type") == "text"
+        )
+
+    sources = [
+        chunk["metadata"]
+        for chunk in retrieved_chunks
+    ]
+
+    return {
+        "answer": answer,
+        "sources": sources
+    }

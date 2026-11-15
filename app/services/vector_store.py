@@ -1,12 +1,18 @@
-import chromadb #Imports the ChromaDB library so Python can communicate with the vector database
+
+import chromadb
 
 
-def create_vector_store(): #function responsible for preparing our vector database
-    client = chromadb.PersistentClient( #creates a database connection that saves information on my computer.
+def create_vector_store():
+    client = chromadb.PersistentClient(
         path="chroma_db"
     )
 
-    collection = client.get_or_create_collection(
+    try:
+        client.delete_collection(name="cognivault_documents")
+    except Exception:
+        pass
+
+    collection = client.create_collection(
         name="cognivault_documents"
     )
 
@@ -14,13 +20,22 @@ def create_vector_store(): #function responsible for preparing our vector databa
 
 
 def store_embeddings(collection, chunks, vectors):
-    ids = [f"chunk_{i}" for i in range(len(chunks))]
 
-    collection.upsert( #inserts new records or updates existing records with the same IDs
-    ids=ids,
-    documents=chunks,
-    embeddings=vectors
-)
+    ids = [
+        f"{chunk['metadata']['source']}_page_{chunk['metadata']['page']}_chunk_{chunk['metadata']['chunk']}"
+        for chunk in chunks
+    ]
+
+    documents = [chunk["text"] for chunk in chunks]
+
+    metadatas = [chunk["metadata"] for chunk in chunks]
+
+    collection.upsert(
+        ids=ids,
+        documents=documents,
+        embeddings=vectors,
+        metadatas=metadatas
+    )
 
     return len(ids)
 

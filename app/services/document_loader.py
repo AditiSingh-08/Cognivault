@@ -1,31 +1,33 @@
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
- 
-from pypdf import PdfReader #the PDF-reading tool
+from pypdf import PdfReader
+import os
 
 
-def extract_text_from_pdf(file_path: str) -> str: #function to extract PDF text
-    """
-    Extract text from a PDF
-    """
+def extract_text_from_pdf(file_path: str) -> list[dict]:
 
     reader = PdfReader(file_path)
-
-    extracted_text = "" #empty box to collect text
+    extracted_pages = []
 
     for page_number, page in enumerate(reader.pages, start=1):
-        page_text = page.extract_text() or "" #If the page has no text, return an empty string
+        page_text = page.extract_text() or ""
 
-        extracted_text += f"\n--- Page {page_number} ---\n"
-        extracted_text += page_text
+        extracted_pages.append({
+            "text": page_text,
+            "metadata": {
+                "source": os.path.basename(file_path),
+                "page": page_number
+            }
+        })
 
-    return extracted_text
+    return extracted_pages
 
 
 def split_text_into_chunks(
-    text: str,
+    pages: list[dict],
     chunk_size: int = 500,
     chunk_overlap: int = 50
-) -> list[str]:
+) -> list[dict]:
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -33,8 +35,18 @@ def split_text_into_chunks(
         separators=["\n\n", "\n", " ", ""]
     )
 
-    chunks = splitter.split_text(text)
+    all_chunks = []
 
-    return chunks
+    for page in pages:
+        chunks = splitter.split_text(page["text"])
 
+        for chunk_number, chunk in enumerate(chunks):
+            all_chunks.append({
+                "text": chunk,
+                "metadata": {
+                    **page["metadata"],
+                    "chunk": chunk_number
+                }
+            })
 
+    return all_chunks
