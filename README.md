@@ -29,11 +29,15 @@ Searching through large PDF documents manually takes time. Cognivault uses RAG t
 ## Features
 
 - Extract text from PDF documents.
-- Split text into smaller chunks.
+- Split extracted text into smaller chunks.
 - Generate embeddings using Hugging Face.
 - Store and search document vectors using ChromaDB.
 - Retrieve relevant chunks based on user questions.
-- Generate context-based answers using Gemini.
+- Generate context-grounded answers using Google Gemini.
+- Extract and preserve PDF page-level metadata.
+- Track source information at the chunk level.
+- Display source references, including PDF filenames and page numbers.
+
 
 
 ## How It Works
@@ -114,22 +118,25 @@ python -m tests.test_ingestion_pipeline
 ```
 
 
+
 ## Development Status
 
-Currently, the core RAG pipeline is implemented and tested.
+The core RAG pipeline is implemented and tested, including PDF processing, embedding generation, vector retrieval, Gemini integration, and source metadata tracking.
 
 - [x] PDF text extraction
 - [x] Text chunking
-- [x] Embedding generation
-- [x] Vector storage and retrieval
+- [x] Embedding generation using Hugging Face
+- [x] Vector storage and retrieval using ChromaDB
 - [x] Gemini integration
-- [x] Context-based answer generation
+- [x] Context-grounded answer generation
+- [x] PDF page-level metadata extraction
+- [x] Chunk-level source tracking
+- [x] Source references in the test pipeline
 
 ### Upcoming Work
-- [ ] Improve document processing
-- [ ] Add source citations
+
+- [ ] Improve document processing and text cleaning
+- [ ] Integrate source citations into the user-facing interface
 - [ ] Build FastAPI backend
 - [ ] Develop Streamlit interface
-- [ ] Add evaluation and testing
-
-
+- [ ] Add retrieval evaluation and automated testing
