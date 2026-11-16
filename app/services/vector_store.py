@@ -7,12 +7,7 @@ def create_vector_store():
         path="chroma_db"
     )
 
-    try:
-        client.delete_collection(name="cognivault_documents")
-    except Exception:
-        pass
-
-    collection = client.create_collection(
+    collection = client.get_or_create_collection(
         name="cognivault_documents"
     )
 

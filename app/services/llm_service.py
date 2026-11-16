@@ -1,8 +1,9 @@
+
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()
 
 
 def load_llm():
@@ -17,28 +18,20 @@ def load_llm():
         raise ValueError("GEMINI_MODEL is missing from .env")
 
     llm = ChatGoogleGenerativeAI(
-    model=model_name,
-    google_api_key=api_key,
-    streaming=False
-)
-
+        model=model_name,
+        google_api_key=api_key,
+        streaming=False
+    )
 
     return llm
 
 
-
-
-def generate_answer(llm, question, retrieved_chunks):
-
-    context = "\n\n".join(
-        chunk["text"] for chunk in retrieved_chunks
-    )
+def generate_answer(llm, question, context):
 
     prompt = f"""
     You are Cognivault, an intelligent document assistant.
 
     Answer the question using ONLY the context provided below.
-
     If the answer is not available in the context,
     say that the document does not contain enough information.
 
@@ -59,15 +52,7 @@ def generate_answer(llm, question, retrieved_chunks):
         answer = "\n".join(
             item["text"]
             for item in answer
-            if item.get("type") == "text"
+            if isinstance(item, dict) and item.get("type") == "text"
         )
 
-    sources = [
-        chunk["metadata"]
-        for chunk in retrieved_chunks
-    ]
-
-    return {
-        "answer": answer,
-        "sources": sources
-    }
+    return answer

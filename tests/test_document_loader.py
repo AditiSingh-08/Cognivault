@@ -9,10 +9,16 @@ from app.services.embedding_service import (
     generate_embeddings
 )
 
-pdf_path = "data/sample.pdf"
+pdf_path = "data/fast_api_practice_questions.pdf"
 
 # Step 1: Extract PDF pages
 pages = extract_text_from_pdf(pdf_path)
+
+print("\n--- PAGE-WISE EXTRACTION CHECK ---")
+
+for page in pages:
+    print(f"\nPage {page['metadata']['page']}:")
+    print(page["text"][:500])
 
 # Step 2: Split pages into chunks
 chunks = split_text_into_chunks(pages)
@@ -28,7 +34,7 @@ print("Total chunks:", len(chunks))
 # Step 4: Display first two chunks with metadata
 for index, chunk in enumerate(chunks[:2], start=1):
     print(f"\n--- Chunk {index} ---")
-    print("Text:", chunk["text"][:300])
+    print("Text:", chunk["text"][:1000])
     print("Metadata:", chunk["metadata"])
 
 # Step 5: Load embedding model

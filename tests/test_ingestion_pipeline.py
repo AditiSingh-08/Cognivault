@@ -23,11 +23,16 @@ from app.services.llm_service import (
 
 
 # Step 1: Extract PDF pages
-pdf_path = "data/sample.pdf"
+pdf_path = "data/fast_api_practice_questions.pdf"
 pages = extract_text_from_pdf(pdf_path)
 
 # Step 2: Split pages into chunks
 chunks = split_text_into_chunks(pages)
+if not chunks:
+    raise ValueError(
+        "No text could be extracted from this PDF. "
+        "Please check whether the PDF is readable or scanned."
+    )
 
 # Step 3: Extract text from structured chunks
 chunk_texts = [chunk["text"] for chunk in chunks]
@@ -53,7 +58,7 @@ print("Records in ChromaDB:", collection.count())
 
 
 # Step 8: Generate query embedding
-question = "How should critical incidents be prioritized?"
+question = "What happens when a vehicle is updated in the FleetTrack API?"
 
 query_vector = generate_query_embedding(
     question,
@@ -64,7 +69,7 @@ query_vector = generate_query_embedding(
 results = search_similar_chunks(
     collection,
     query_vector,
-    n_results=3
+    n_results=5
 )
 
 print("\n--- RETRIEVAL SUMMARY ---")
