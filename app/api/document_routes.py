@@ -1,4 +1,4 @@
-
+import uuid
 import os
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
@@ -36,6 +36,7 @@ async def upload_document(file: UploadFile = File(...)):
 
     # Step 2: Create a safe filename
     filename = os.path.basename(file.filename)
+    document_id = uuid.uuid4().hex
     file_path = os.path.join(UPLOAD_DIR, filename)
 
     # Step 3: Read uploaded file
@@ -70,7 +71,8 @@ async def upload_document(file: UploadFile = File(...)):
         total_stored = store_embeddings(
             collection,
             chunks,
-            vectors
+            vectors,
+            document_id
         )
         total_chunks = len(chunks)
 
