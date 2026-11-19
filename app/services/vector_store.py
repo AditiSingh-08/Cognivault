@@ -35,11 +35,23 @@ def store_embeddings(collection, chunks, vectors):
     return len(ids)
 
 
-def search_similar_chunks(collection, query_vector, n_results=3):
+def search_similar_chunks(
+    collection,
+    query_vector,
+    n_results=5,
+    source_filename=None
+):
+    search_params = {
+        "query_embeddings": [query_vector],
+        "n_results": n_results
+    }
 
-    results = collection.query(
-        query_embeddings=[query_vector],
-        n_results=n_results
-    )
+    # Restrict search to the selected PDF
+    if source_filename:
+        search_params["where"] = {
+            "source": source_filename
+        }
+
+    results = collection.query(**search_params)
 
     return results
